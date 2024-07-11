@@ -12,7 +12,7 @@ app = Flask(__name__)
 CORS(app)
 
 # Replace this with your actual Alpha Vantage API key
-api_key = os.get_env('ALPHA_VANTAGE_API_KEY')
+api_key = os.getenv('ALPHA_VANTAGE_API_KEY')
 
 # Path to the default SP500 CSV file
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
