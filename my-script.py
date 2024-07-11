@@ -4,16 +4,20 @@ import csv
 import os
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
 CORS(app)
+
 # Replace this with your actual Alpha Vantage API key
-# api_key = "5DUEWKX7ZVLG16T3"
-api_key = "API_KEYecS5TE5QD2OH2ZRDIWZQ4VH14CAOJNPR"
+api_key = os.get_env('ALPHA_VANTAGE_API_KEY')
+
 # Path to the default SP500 CSV file
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DEFAULT_CSV_PATH = os.path.join(BASE_DIR,'backend', 'constants', 'sp500.csv')
-USER_STOCK_CSV_PATH = os.path.join(BASE_DIR,'backend', 'constants', 'user_stock_data.csv')
+DEFAULT_CSV_PATH = os.path.join(BASE_DIR, 'constants', 'sp500.csv')
+USER_STOCK_CSV_PATH = os.path.join(BASE_DIR, 'constants', 'user_stock_data.csv')
 
 app.logger.info(f"Attempting to write to: {DEFAULT_CSV_PATH}")
 
@@ -142,7 +146,7 @@ def returnSomething():
 
 @app.route('/constants/<path:filename>')
 def serve_csv(filename):
-    return send_from_directory(os.path.join(BASE_DIR, 'backend','constants'), filename)
+    return send_from_directory(os.path.join(BASE_DIR, 'constants'), filename)
 
 if __name__ == '__main__':
     app.run(debug=True)
