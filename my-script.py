@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app, resources={r"/constants/*": {"origins": "*"}})
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 # Replace this with your actual Alpha Vantage API key
 api_key = os.getenv('ALPHA_VANTAGE_API_KEY')
