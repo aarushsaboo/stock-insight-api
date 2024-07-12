@@ -15,11 +15,13 @@ CORS(app)
 api_key = os.getenv('ALPHA_VANTAGE_API_KEY')
 
 # Path to the default SP500 CSV file
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DEFAULT_CSV_PATH = os.path.join(BASE_DIR, 'constants', 'sp500.csv')
-USER_STOCK_CSV_PATH = os.path.join(BASE_DIR, 'constants', 'user_stock_data.csv')
+# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# DEFAULT_CSV_PATH = os.path.join(BASE_DIR, 'constants', 'sp500.csv')
+# USER_STOCK_CSV_PATH = os.path.join(BASE_DIR, 'constants', 'user_stock_data.csv')
 
-app.logger.info(f"Attempting to write to: {DEFAULT_CSV_PATH}")
+DEFAULT_CSV_PATH = "https://stock-insight-api.onrender.com/constants/sp500.csv"
+USER_STOCK_CSV_PATH = "https://stock-insight-api.onrender.com/constants/user_stock_data.csv"
+# app.logger.info(f"Attempting to write to: {DEFAULT_CSV_PATH}")
 
 def get_stock_data(symbol, days=90):
     base_url = "https://www.alphavantage.co/query"
@@ -144,9 +146,9 @@ def returnSomething():
     print("This is working")
     return "This is working"
 
-@app.route('/constants/<path:filename>')
-def serve_csv(filename):
-    return send_from_directory(os.path.join(BASE_DIR, 'constants'), filename)
+# @app.route('/constants/<path:filename>')
+# def serve_csv(filename):
+#     return send_from_directory(os.path.join(BASE_DIR, 'constants'), filename)
 
 if __name__ == '__main__':
     app.run(debug=True)
