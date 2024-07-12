@@ -132,7 +132,7 @@ def fetch_stock_data():
         if stock_data:
             try:
                 save_to_csv(stock_data, 'user_stock_data.csv')
-                return jsonify({"message": f"Data saved for {symbol}", "csvPath": "/constants/user_stock_data.csv", "success": True})
+                return jsonify({"message": f"Data saved for {symbol}", "csvPath": "https://stock-insight-api.onrender.com/constants/user_stock_data.csv", "success": True})
             except Exception as e:
                 app.logger.error(f"Error saving CSV: {str(e)}")
                 return jsonify({"message": f"Failed to save data for {symbol}", "error": str(e), "success": False}), 500
