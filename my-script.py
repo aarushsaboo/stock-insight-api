@@ -17,11 +17,11 @@ api_key = os.getenv('ALPHA_VANTAGE_API_KEY')
 # Path to the default SP500 CSV file
 # BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # DEFAULT_CSV_PATH = os.path.join(BASE_DIR, 'constants', 'sp500.csv')
-# USER_STOCK_CSV_PATH = os.path.join(BASE_DIR, 'constants', 'user_stock_data.csv')
+# USER_STOCK_CSV_PATH = os.path.join(BASE_DIR, 'constants', 'user_stock_data.csv') #didn't work
 
-DEFAULT_CSV_PATH = "https://stock-insight-api.onrender.com/constants/sp500.csv"
-USER_STOCK_CSV_PATH = "https://stock-insight-api.onrender.com/constants/user_stock_data.csv"
-app.logger.info(f"Attempting to write to: {DEFAULT_CSV_PATH}")
+# DEFAULT_CSV_PATH = "https://stock-insight-api.onrender.com/constants/sp500.csv"
+# USER_STOCK_CSV_PATH = "https://stock-insight-api.onrender.com/constants/user_stock_data.csv"
+# app.logger.info(f"Attempting to write to: {DEFAULT_CSV_PATH}") #Didn't work
 
 def get_stock_data(symbol, days=90):
     base_url = "https://www.alphavantage.co/query"
@@ -110,7 +110,8 @@ def get_stock_data(symbol, days=90):
 
 def save_to_csv(data, filename):
     print(f"Attempting to write to: {os.path.abspath(filename)}")
-    with open(filename, 'w', newline='') as csvfile:
+    # with open(filename, 'w', newline='') as csvfile:
+    with open(os.path.join('constants', filename), 'w', newline='') as csvfile:
         fieldnames = ['Date', 'Open', 'High', 'Low', 'Close']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
@@ -123,15 +124,15 @@ def fetch_stock_data():
     symbol = request.args.get('symbol')
 
     if not symbol:
-        return jsonify({"message": "Using default SP500 data", "csvPath": DEFAULT_CSV_PATH, "success": True})
+        return jsonify({"message": "Using default SP500 data", "csvPath": "/constants/sp500.csv", "success": True})
 
     try:
         stock_data = get_stock_data(symbol)
 
         if stock_data:
             try:
-                save_to_csv(stock_data, USER_STOCK_CSV_PATH)
-                return jsonify({"message": f"Data saved for {symbol}", "csvPath": "https://stock-insight-api.onrender.com/constants/user_stock_data.csv", "success": True})
+                save_to_csv(stock_data, 'user_stock_data.csv')
+                return jsonify({"message": f"Data saved for {symbol}", "csvPath": "/constants/user_stock_data.csv", "success": True})
             except Exception as e:
                 app.logger.error(f"Error saving CSV: {str(e)}")
                 return jsonify({"message": f"Failed to save data for {symbol}", "error": str(e), "success": False}), 500
