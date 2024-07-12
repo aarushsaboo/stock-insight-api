@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/constants/*": {"origins": "*"}})
 
 # Replace this with your actual Alpha Vantage API key
 api_key = os.getenv('ALPHA_VANTAGE_API_KEY')
@@ -150,7 +150,11 @@ def returnSomething():
 @app.route('/constants/<path:filename>')
 def serve_csv(filename):
     # return send_from_directory(os.path.join(BASE_DIR, 'constants'), filename)
-    return send_from_directory('constants', filename)
+    try:
+        return send_from_directory('constants', filename)
+    except Exception as e:
+        app.logger.error(f"Error serving CSV: {str(e)}")
+        return jsonify({"error": str(e)}), 404
 
 if __name__ == '__main__':
     app.run(debug=True)
